@@ -17,3 +17,4 @@ Visit http://localhost:5173
 - more factorization of redundant code in ActorView and MovieView
 - Urlparams for modal 
 - LocalStorage or session for unauthenticated user rating movies
+- Proper types DTO

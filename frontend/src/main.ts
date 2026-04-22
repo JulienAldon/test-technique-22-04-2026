@@ -13,16 +13,16 @@ import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query'
 const vuetify = createVuetify({
   components,
   directives,
-});
+})
 
-const app = createApp(App);
+const app = createApp(App)
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 app.use(VueQueryPlugin, {
   queryClient,
-});
+})
 
-app.use(router);
-app.use(vuetify);
-app.mount('#app');
+app.use(router)
+app.use(vuetify)
+app.mount('#app')

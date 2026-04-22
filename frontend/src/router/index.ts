@@ -16,11 +16,11 @@ const router = createRouter({
       name: 'movie',
       component: MovieView,
     },
-        {
+    {
       path: '/actors/',
       name: 'actor',
       component: ActorsView,
-    }
+    },
   ],
 })
 

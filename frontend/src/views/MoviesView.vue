@@ -61,11 +61,15 @@ const submit = async () => {
   reset()
 }
 
-const deleteItem = async (id: number) => {
+const deleteItem = async (id?: number) => {
+  if (!id) return
   await deleteMovie(id)
 }
 
 const handleEdit = (movie: Movie) => {
+  if (!movie.id) {
+    return;
+  }
   openEdit(movie.id, {
     title: movie.title,
     description: movie.description,
