@@ -1,3 +1,4 @@
+import ActorsView from '@/views/ActorsView.vue'
 import MoviesView from '@/views/MoviesView.vue'
 import MovieView from '@/views/MovieView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -14,6 +15,11 @@ const router = createRouter({
       path: '/movies/:id',
       name: 'movie',
       component: MovieView,
+    },
+        {
+      path: '/actors/',
+      name: 'actor',
+      component: ActorsView,
     }
   ],
 })

@@ -29,7 +29,8 @@ export type Movie = {
     id: number;
     title: string;
     description: string;
-    actors: number[];
+    actor_ids: number[];
+    actors?: Actor[];
     reviews: Review[]
 }
 

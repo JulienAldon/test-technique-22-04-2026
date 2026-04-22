@@ -1,5 +1,5 @@
 import { createReviews, deleteReviews, getReview, getReviews, updateReviews } from "@/api/reviews"
-import { Review } from "@/api/types";
+import type { Review } from "@/api/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 
 export const fetchReviews = async () => {
@@ -50,6 +50,7 @@ export const useCreateReview = () => {
     mutationFn: createReview,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reviews"] });
+      queryClient.invalidateQueries({ queryKey: ["movie"] });
     },
   });
 };

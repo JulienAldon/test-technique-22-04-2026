@@ -1,9 +1,10 @@
 import { createActors, deleteActors, getActor, getActors, updateActors } from "@/api/actors"
 import type { Actor, Actors } from "@/api/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import { computed, type Ref } from "vue";
 
-export const fetchActors = async (): Promise<Actors> => {
-    const res = await getActors();
+export const fetchActors = async (page = 1): Promise<Actors> => {
+    const res = await getActors({ page });
     return res.data;
 }
 
@@ -28,10 +29,10 @@ export const deleteActor = async (id) => {
 }
 
 
-export const useActors = () => {
+export const useActors = (page: Ref<number>) => {
   return useQuery({
-    queryKey: ["actors"],
-    queryFn: fetchActors,
+    queryKey: computed(() => ["actors", page.value]),
+    queryFn: () => fetchActors(page.value),
   });
 };
 

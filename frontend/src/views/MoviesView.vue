@@ -1,49 +1,92 @@
 <script setup lang="ts">
-import type { Actor } from '@/api/types'
+import type { Actor, Movie } from '@/api/types'
 import ManageModal from '@/components/ManageModal.vue'
-import { useActors } from '@/services/actors'
-import { useMovies, useCreateMovie } from '@/services/movies'
+import PaginatedList from '@/components/PaginatedList.vue'
+import AppPagination from '@/components/AppPagination.vue'
+
 import { ref } from 'vue'
+import { useCrudForm } from '@/hooks/useCrudForm'
+
+import { useActors } from '@/services/actors'
+import {
+  useMovies,
+  useCreateMovie,
+  useDeleteMovie,
+  useUpdateMovie,
+} from '@/services/movies'
+
 const page = ref(1)
 
 const { data: movies, isLoading: isMoviesLoading } = useMovies(page)
-const { data: actors, isLoading: isActorsLoading } = useActors()
+const { data: actors, isLoading: isActorsLoading } = useActors(page)
 
 const { mutateAsync: createMovie } = useCreateMovie()
+const { mutateAsync: updateMovie } = useUpdateMovie()
+const { mutateAsync: deleteMovie } = useDeleteMovie()
 
-const dialog = ref(false)
-
-const form = ref({
+const {
+  dialog,
+  isEditMode,
+  editingId,
+  form,
+  openCreate,
+  openEdit,
+  reset,
+} = useCrudForm({
   title: '',
   description: '',
   actors: [] as number[],
 })
 
 const submit = async () => {
-  await createMovie({
-    title: form.value.title,
-    description: form.value.description,
-    actors: form.value.actors,
-  })
-
-  dialog.value = false
-
-  // reset form
-  form.value = {
-    title: '',
-    description: '',
-    actors: [],
+  if (isEditMode.value && editingId.value !== null) {
+    await updateMovie({
+      id: editingId.value,
+      data: {
+        id: editingId.value,
+        title: form.value.title,
+        description: form.value.description,
+        actor_ids: form.value.actors,
+        reviews: [],
+      },
+    })
+  } else {
+    await createMovie({
+      title: form.value.title,
+      description: form.value.description,
+      actor_ids: form.value.actors,
+    })
   }
+
+  reset()
+}
+
+const deleteItem = async (id: number) => {
+  await deleteMovie(id)
+}
+
+const handleEdit = (movie: Movie) => {
+  openEdit(movie.id, {
+    title: movie.title,
+    description: movie.description,
+    actors: movie?.actors?.map((a) => a.id) || [],
+  })
 }
 </script>
+
 <template>
-  <main>
-    <section>
-      <v-btn color="primary" @click="dialog = true" variant="outlined">
+  <main class="movies">
+    <h1>Movies</h1>
+
+    <section class="actions">
+      <v-btn color="primary" variant="outlined" @click="openCreate">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
 
-      <ManageModal v-model="dialog" title="Create Movie">
+      <ManageModal
+        v-model="dialog"
+        :title="isEditMode ? 'Edit Movie' : 'Create Movie'"
+      >
         <v-text-field v-model="form.title" label="Title" />
         <v-textarea v-model="form.description" label="Description" />
 
@@ -60,36 +103,57 @@ const submit = async () => {
 
         <template #actions>
           <v-spacer />
-          <v-btn text @click="dialog = false">Cancel</v-btn>
+          <v-btn text @click="reset">Cancel</v-btn>
           <v-btn color="primary" @click="submit">Save</v-btn>
         </template>
       </ManageModal>
     </section>
 
     <section>
-      <div v-if="isMoviesLoading">Loading</div>
+      <PaginatedList
+        :items="movies?.results || []"
+        :loading="isMoviesLoading"
+        item-key="id"
+      >
+        <template #item="{ item }">
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+          <v-list-item-subtitle>
+            {{ item.description }}
+          </v-list-item-subtitle>
+        </template>
 
-      <v-list v-else lines="one">
-        <router-link
-          v-for="movie in movies?.results || []"
-          :key="movie.id"
-          :to="`/movies/${movie.id}`"
-          style="text-decoration: none; color: inherit"
-        >
-          <v-list-item
-            :title="movie.title"
-            :subtitle="movie.description"
-          />
-        </router-link>
-      </v-list>
+        <template #actions="{ item }">
+          <v-btn color="primary" @click="handleEdit(item)">
+            <v-icon>mdi-pencil</v-icon>
+          </v-btn>
 
-    <div class="d-flex justify-center mt-4">
-      <v-pagination
-        v-model="page"
-        :length="Math.ceil((movies?.count || 0) / 5)"
-        :total-visible="5"
+          <v-btn color="error" @click="deleteItem(item.id)">
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+        </template>
+      </PaginatedList>
+
+      <AppPagination
+        v-model:page="page"
+        :total="movies?.count || 0"
+        :per-page="5"
       />
-    </div>
     </section>
   </main>
 </template>
+
+<style scoped>
+.movies {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+section {
+  width: 80vw;
+}
+
+.actions {
+  margin-bottom: 1rem;
+}
+</style>
