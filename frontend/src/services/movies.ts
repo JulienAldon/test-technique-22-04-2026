@@ -1,5 +1,5 @@
 import { createMovies, deleteMovies, getMovie, getMovies, updateMovies } from '@/api/movies'
-import type { Movie, Movies } from '@/api/types'
+import type { Movie, MovieDto, Movies } from '@/api/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, type Ref } from 'vue'
 
@@ -13,12 +13,12 @@ export const fetchMovie = async (id: number): Promise<Movie> => {
   return res.data
 }
 
-export const createMovie = async (data: Movie): Promise<Movie> => {
+export const createMovie = async (data: MovieDto): Promise<Movie> => {
   const res = await createMovies(data)
   return res.data
 }
 
-export const updateMovie = async (id: number, data: Movie): Promise<Movie> => {
+export const updateMovie = async (id: number, data: MovieDto): Promise<Movie> => {
   const res = await updateMovies(id, data)
   return res.data
 }

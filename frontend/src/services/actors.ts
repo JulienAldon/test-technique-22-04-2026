@@ -1,5 +1,5 @@
 import { createActors, deleteActors, getActor, getActors, updateActors } from '@/api/actors'
-import type { Actor, Actors } from '@/api/types'
+import type { Actor, Actors, ActorDto } from '@/api/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { computed, type Ref } from 'vue'
 
@@ -13,12 +13,12 @@ export const fetchActor = async (id: number): Promise<Actor> => {
   return res.data
 }
 
-export const createActor = async (data: Actor): Promise<Actor> => {
+export const createActor = async (data: ActorDto): Promise<Actor> => {
   const res = await createActors(data)
   return res.data
 }
 
-export const updateActor = async (id: number, data: Actor): Promise<Actor> => {
+export const updateActor = async (id: number, data: ActorDto): Promise<Actor> => {
   const res = await updateActors(id, data)
   return res.data
 }

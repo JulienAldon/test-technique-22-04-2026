@@ -1,5 +1,5 @@
 import { createReviews, deleteReviews, getReview, getReviews, updateReviews } from '@/api/reviews'
-import type { Review } from '@/api/types'
+import type { Review, ReviewDto } from '@/api/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 
 export const fetchReviews = async () => {
@@ -12,12 +12,12 @@ export const fetchReview = async (id: number) => {
   return res.data
 }
 
-export const createReview = async (data: Review) => {
+export const createReview = async (data: ReviewDto) => {
   const res = await createReviews(data)
   return res.data
 }
 
-export const updateReview = async (id: number, data: Review) => {
+export const updateReview = async (id: number, data: ReviewDto) => {
   const res = await updateReviews(id, data)
   return res.data
 }
@@ -58,7 +58,7 @@ export const useUpdateReview = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: Review }) => updateReview(id, data),
+    mutationFn: ({ id, data }: { id: number; data: ReviewDto }) => updateReview(id, data),
 
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['reviews'] })

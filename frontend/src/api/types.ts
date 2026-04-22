@@ -25,6 +25,11 @@ export type Actor = {
   last_name: string
 }
 
+export type ActorDto = {
+  first_name: string
+  last_name: string
+}
+
 export type Movie = {
   id?: number
   title: string
@@ -34,8 +39,19 @@ export type Movie = {
   reviews?: Review[]
 }
 
+export type MovieDto = {
+  title: string
+  description: string
+  actor_ids: number[]
+}
+
 export type Review = {
   id: number
+  grade: number
+  movie: number
+}
+
+export type ReviewDto = {
   grade: number
   movie: number
 }
