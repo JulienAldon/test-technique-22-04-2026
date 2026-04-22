@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "films"
+name = "movies"
 version = "0.1.0"
 description = "Django project with Django REST Framework"
 readme = "README.md"
