@@ -134,6 +134,10 @@ const handleEdit = (movie: Movie) => {
           <v-btn color="error" @click="deleteItem(item.id)">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
+
+          <v-btn color="primary" :to="`/movies/${item.id}`">
+            <v-icon>mdi-open-in-new</v-icon>
+          </v-btn>
         </template>
       </PaginatedList>
 
