@@ -1,0 +1,22 @@
+info:
+  name: POST actors
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: http://localhost:8000/api/actors/
+  body:
+    type: json
+    data: |-
+      {
+        "first_name": "Daniel",
+        "last_name": "Radclief"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,22 @@
+info:
+  name: POST reviews
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: http://localhost:8000/api/reviews/
+  body:
+    type: json
+    data: |-
+      {
+        "grade": "5.1",
+        "movie": 1
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

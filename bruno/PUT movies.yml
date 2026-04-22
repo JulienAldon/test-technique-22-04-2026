@@ -1,0 +1,23 @@
+info:
+  name: PUT movies
+  type: http
+  seq: 10
+
+http:
+  method: PUT
+  url: http://localhost:8000/api/movies/1/
+  body:
+    type: json
+    data: |-
+      {
+        "title": "qweqwe",
+        "description": "qweqweqw",
+        "actors": []
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
